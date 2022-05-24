@@ -9,8 +9,26 @@ export default function usePosts() {
     const isLoading = ref(false);
     const swal = inject('$swal');
 
-    const getPosts = async (page = 1, category = '', orderColumn = 'created_at', orderDirection = 'desc') => {
-        axios.get('/api/posts?page=' + page + '&category=' + category + '&order_column=' + orderColumn + '&order_direction=' + orderDirection)
+    const getPosts = async (
+        page = 1,
+        search_category = '',
+        search_id = '',
+        search_title = '',
+        search_content = '',
+        search_global = '',
+        orderColumn = 'created_at',
+        orderDirection = 'desc'
+    ) => {
+        axios.get('/api/posts?page='
+            + page
+            + '&search_category=' + search_category
+            + '&search_id=' + search_id
+            + '&search_title=' + search_title
+            + '&search_content=' + search_content
+            + '&order_column=' + search_global
+            + '&order_global=' + orderColumn
+            + '&order_direction=' + orderDirection
+        )
             .then(response => {
                 posts.value = response.data;
             });
