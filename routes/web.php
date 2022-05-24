@@ -8,3 +8,4 @@ Route::view('/{any?}', 'dashboard')
     ->where('any', '.*');
 
 Route::post('login',[AuthenticatedSessionController::class, 'store']);
+Route::post('logout',[AuthenticatedSessionController::class, 'destroy']);
