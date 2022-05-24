@@ -125,7 +125,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                         <router-link :to="{ name: 'posts.edit', params: {id: post.id} }">Edit</router-link>
-                        <a href="#" @click.prevent="deletePost(post.id)" class="ml-2">Delete</a>
+                        <a href="#" v-if="can('posts.delete')" @click.prevent="deletePost(post.id)" class="ml-2">Delete</a>
                     </td>
                 </tr>
                 </tbody>
@@ -140,6 +140,7 @@
 import {ref, onMounted, watch} from "vue";
 import usePosts from "../composables/posts";
 import useCategories from "../composables/categories";
+import {useAbility} from '@casl/vue';
 
 export default {
     setup() {
@@ -152,6 +153,7 @@ export default {
         const orderDirection = ref('desc');
         const {posts, getPosts, deletePost} = usePosts();
         const {categories, getCategories} = useCategories();
+        const {can} = useAbility();
 
         onMounted(() => {
             getPosts();
@@ -196,7 +198,8 @@ export default {
             orderDirection,
             updateOrdering,
             getPosts,
-            deletePost
+            deletePost,
+            can
         };
     }
 }
