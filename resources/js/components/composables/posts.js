@@ -33,7 +33,10 @@ export default function usePosts() {
         axios.post('/api/posts', serializedPost)
             .then(response => {
                 router.push({name: 'posts.index'});
-                swal('New post saved successfully');
+                swal({
+                    icon: 'success',
+                    title: 'Post created successfully'
+                });
             })
             .catch(error => {
                 if (error.response?.data) {
@@ -52,7 +55,10 @@ export default function usePosts() {
         axios.put('/api/posts/' + post.id, post)
             .then(response => {
                 router.push({name: 'posts.index'});
-                swal('Post updated successfully');
+                swal({
+                    icon: 'success',
+                    title: 'Post updated successfully'
+                });
             })
             .catch(error => {
                 if (error.response?.data) {
@@ -69,5 +75,37 @@ export default function usePosts() {
             });
     }
 
-    return {post, posts, getPost, getPosts, storePost, updatePost, validationErrors, isLoading};
+    const deletePost = async (id) => {
+        swal({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this action!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            confirmButtonColor: '#ef4444',
+            timer: 20000,
+            timerProgressBar: true,
+            reverseButtons: true,
+        })
+            .then(result => {
+                if (result.isConfirmed) {
+                    axios.delete('/api/posts/' + id)
+                        .then(response => {
+                            getPosts();
+                            swal({
+                                icon: 'success',
+                                title: 'Post deleted successfully'
+                            });
+                        })
+                        .catch(error => {
+                            swal({
+                                icon: 'error',
+                                title: 'Something went wrong'
+                            });
+                        });
+                }
+            });
+    }
+
+    return {posts, post, getPost, getPosts, storePost, updatePost, deletePost, validationErrors, isLoading};
 }
